@@ -1,6 +1,13 @@
 ; Shortcuts for common development tasks
 
+; for _IsPressed()
+#include <Misc.au3>
+
+; ! = ALT
+; + = SHIFT
+; ^ = CTRL
 HotKeySet("!+t", "ToolkitStartup")
+HotKeySet("!+a", "TestSXAD")
 
 HotKeySet("!+q", "Terminate")
 HotKeySet("{END}", "Terminate")
@@ -28,6 +35,38 @@ Func ToolkitStartup()
 	
 EndFunc
 
+Func TestSXAD()
+	ClearModifiers()
+
+	Send("{ENTER}")
+	Send("SXAD{ENTER}")
+	Sleep(1250)
+	Send("{TAB}")
+	Sleep(100)
+	Send("53615494024701AC003906B6")
+	Sleep(100)
+	Send("{TAB}")
+	Sleep(100)
+	Send("ME{ENTER}")
+	Sleep(100)
+	Send("{ENTER}")
+	Sleep(100)
+EndFunc
+
+
+Func ClearModifiers()	
+	While(_IsPressed(10))
+		Send("{SHIFTUP}")
+	WEnd
+	
+	While(_IsPressed(11))
+		Send("{CTRLUP}")
+	WEnd
+	
+	While(_IsPressed(12))
+		Send("{ALTUP}")
+	WEnd
+EndFunc
 
 Func Terminate()
     Exit 0
