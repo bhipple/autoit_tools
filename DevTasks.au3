@@ -22,6 +22,7 @@ WEnd
 ; Shows ToolTip with keyboard shortcuts for functions
 Func ShortcutHelp()
 	ClearModifiers()
+	
 	ToolTip("Shortcuts" & @CRLF _
 		& "!+a	Test SXAD" & @CRLF _
 		& "!+h	Shortcut Help" & @CRLF _
@@ -54,6 +55,8 @@ EndFunc
 
 ; Move and resize ibm2 and linxdev21
 Func ResizeXterm()
+	ClearModifiers()
+	
 	Local $ibmSize[2] = [800, 1440]
 	Local $ibmPos[2] = [$resolution[0] - $ibmSize[0], 0]
 	
