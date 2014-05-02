@@ -90,15 +90,9 @@ EndFunc
 ; Clear shift/ctrl/alt to prevent them from getting stuck or the script executing while the user
 ; is still holding them down.
 Func ClearModifiers()	
-	While(_IsPressed(10))
+	While(_IsPressed(10) Or _IsPressed(11) Or _IsPressed(12))
 		Send("{SHIFTUP}")
-	WEnd
-	
-	While(_IsPressed(11))
 		Send("{CTRLUP}")
-	WEnd
-	
-	While(_IsPressed(12))
 		Send("{ALTUP}")
 	WEnd
 EndFunc
