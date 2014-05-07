@@ -11,7 +11,8 @@ HotKeySet("!+h", "ShortcutHelp")
 HotKeySet("!+r", "ResizeXterm")
 HotKeySet("!+u", "Uuid")
 HotKeySet("!+q", "Terminate")
-HotKeySet("!+v", "RdeVimCopy")
+HotKeySet("!+v", "RdeToVimCopy")
+HotKeySet("!+b", "VimToRdeCopy")
 
 
 Local $resolution[2] = [5120, 1440]
@@ -29,12 +30,19 @@ Func ShortcutHelp()
 	ClearModifiers()
 	
 	ToolTip("Shortcuts" & @CRLF _
-		& "!+a	Test SXAD" & @CRLF _
+		& " Script Functions: " & @CRLF _
 		& "!+h	Shortcut Help" & @CRLF _
 		& "!+q	Terminate" & @CRLF _
+		& @CRLF _
+		& " Windows Functions: " & @CRLF _
 		& "!+r	Resize XTerm" & @CRLF _
 		& "!+u	Uuid" & @CRLF _
-		& "!+v	RdeVimCopy" & @CRLF _
+		& "!+v	RdeToVimCopy" & @CRLF _
+		& "!+b	VimToRdeCopy" & @CRLF _
+		& @CRLF _
+		& " Terminal Functions: " & @CRLF _
+		& "!+a	Test SXAD" & @CRLF _
+		& @CRLF _
 		, 0, 0)
 		
 		
@@ -95,9 +103,8 @@ Func ClearModifiers()
 	WEnd
 EndFunc
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; WIP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-Func RdeVimCopy()
+Func RdeToVimCopy()
 	Opt("WinTitleMatchMode", 2)	; substring match
 	WinActivate("Bloomberg Rapid Development Environment")
 	ClearModifiers()
@@ -116,6 +123,29 @@ Func RdeVimCopy()
 	
 	ClearModifiers()
 EndFunc
+
+Func VimToRdeCopy()
+	Opt("WinTitleMatchMode", 2)	; substring match
+	WinActivate("VIM")
+	Send("{ESCAPE}")
+	Send("gg{SHIFTDOWN}v")
+	Sleep(100)
+	Send("g")
+	ClearModifiers()
+	Send("{CTRLDOWN}c")
+	
+	WinActivate("Bloomberg Rapid Development Environment")
+	ClearModifiers()
+	Sleep(250)
+	Send("{CTRLDOWN}a")
+	ClearModifiers()
+	Sleep(100)
+	Send("{DELETE}")
+	Send("{CTRLDOWN}v")
+	ClearModifiers()
+EndFunc
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; WIP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Starts IBM2 and LinxDev21, then resize and position the windows
 Func ToolkitStartup()
