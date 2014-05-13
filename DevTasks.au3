@@ -85,9 +85,64 @@ Func TestSXAD()
 	ClearModifiers()
 
 	Send("{ENTER}")
-	Send("RRRR SXAD 290 53641B3602BE0294036400A8 /")
+	Send("RRRR SXAD 290 5370D0BC03B700DC03640157 /")
 	Call("Uuid")
 	Send("{ENTER}")
+EndFunc
+
+
+Func RdeToVimCopy()
+	Opt("WinTitleMatchMode", 2)	; substring match
+	If Not WinActivate("Bloomberg Rapid Development Environment") Then
+		ErrorTooltip("Could not find Rapid.")
+		Return
+	Endif
+	ClearModifiers()
+	Sleep(250)
+	Send("{CTRLDOWN}a")
+	Sleep(100)
+	Send("c")
+	ClearModifiers()
+	
+	If Not WinActivate("VIM") Then
+		ErrorTooltip("Could not find Vim.")
+		Return
+	EndIf
+	Send(":tabe{ENTER}")
+	Send('"*P{ENTER}')
+	Send(":set syntax=javascript{ENTER}")
+	Send($vimLeader & $vimLeader & "w")		;; Remove trailing whitespace (my vimrc)
+	Send("gg")
+	
+	ClearModifiers()
+EndFunc
+
+Func VimToRdeCopy()
+	Opt("WinTitleMatchMode", 2)	; substring match
+	If Not WinActivate("VIM") Then
+		ErrorTooltip("Could not find Vim.")
+		Return
+	EndIf
+	Send("{ESCAPE}")
+	Send("gg{SHIFTDOWN}v")
+	Sleep(100)
+	Send("g")
+	ClearModifiers()
+	Send("{CTRLDOWN}c")
+	
+	If Not WinActivate("Bloomberg Rapid Development Environment") Then
+		ErrorTooltip("Could not find Rapid.")
+		Return
+	Endif
+	
+	ClearModifiers()
+	Sleep(250)
+	Send("{CTRLDOWN}a")
+	ClearModifiers()
+	Sleep(100)
+	Send("{DELETE}")
+	Send("{CTRLDOWN}v")
+	ClearModifiers()
 EndFunc
 
 
@@ -103,46 +158,12 @@ Func ClearModifiers()
 	WEnd
 EndFunc
 
-
-Func RdeToVimCopy()
-	Opt("WinTitleMatchMode", 2)	; substring match
-	WinActivate("Bloomberg Rapid Development Environment")
-	ClearModifiers()
-	Sleep(250)
-	Send("{CTRLDOWN}a")
-	Sleep(100)
-	Send("c")
-	ClearModifiers()
+Func ErrorTooltip($msg)
+	Local $mousePos = MouseGetPos()
 	
-	WinActivate("VIM")
-	Send(":tabe{ENTER}")
-	Send('"*P{ENTER}')
-	Send(":set syntax=javascript{ENTER}")
-	Send($vimLeader & $vimLeader & "w")		;; Remove trailing whitespace (my vimrc)
-	Send("gg")
-	
-	ClearModifiers()
-EndFunc
-
-Func VimToRdeCopy()
-	Opt("WinTitleMatchMode", 2)	; substring match
-	WinActivate("VIM")
-	Send("{ESCAPE}")
-	Send("gg{SHIFTDOWN}v")
-	Sleep(100)
-	Send("g")
-	ClearModifiers()
-	Send("{CTRLDOWN}c")
-	
-	WinActivate("Bloomberg Rapid Development Environment")
-	ClearModifiers()
-	Sleep(250)
-	Send("{CTRLDOWN}a")
-	ClearModifiers()
-	Sleep(100)
-	Send("{DELETE}")
-	Send("{CTRLDOWN}v")
-	ClearModifiers()
+	ToolTip($msg, $mousePos[0], $mousePos[1])
+	Sleep(3000)
+	ToolTip("")
 EndFunc
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; WIP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
