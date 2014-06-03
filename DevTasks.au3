@@ -54,13 +54,23 @@ EndFunc
 ; Move and resize ibm2 and linxdev21
 Func ResizeXterm()
     ClearModifiers()
+	
+	Local $startMenuHeight = 40
+	
+	; Right side of left monitor
+    Local $linxSize[2] = [900, 1440 - $startMenuHeight]
+    Local $linxPos[2] = [$resolution[0] / 2 - $linxSize[0], 0]
 
+	; Right side of right monitor
     Local $ibmSize[2] = [800, 1440]
     Local $ibmPos[2] = [$resolution[0] - $ibmSize[0], 0]
+	
+	; Left side of right monitor
+    Local $gvimSize[2] = [($resolution[0] / 2) - $ibmSize[0], 1440]
+    Local $gvimPos[2] = [$resolution[0] / 2, 0]
 
-    Local $linxSize[2] = [($resolution[0] / 2) - $ibmSize[0], 1440]
-    Local $linxPos[2] = [$resolution[0] / 2, 0]
 
+	; Move the windows
     Local $ibmWin = WinActivate("ibm")
     If($ibmWin) Then
         WinMove($ibmWin, "ibm2", $ibmPos[0], $ibmPos[1], $ibmSize[0], $ibmSize[1])
@@ -70,6 +80,13 @@ Func ResizeXterm()
     If($linxWin) Then
         WinMove($linxWin, "linxdev21", $linxPos[0], $linxPos[1], $linxSize[0], $linxSize[1])
     EndIf
+	
+    Opt("WinTitleMatchMode", 2) ; substring match
+	Local $gvim = WinActive("GVIM")
+	If($gvim) Then
+		WinMove($gvim, "GVIM", $gvimPos[0], $gvimPos[1], $gvimSize[0], $gvimSize[1])
+	EndIf
+	
 EndFunc
 
 ; Paste my UUID
