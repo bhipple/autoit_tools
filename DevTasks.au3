@@ -11,7 +11,7 @@ HotKeySet("!+a", "TestSXAD")
 HotKeySet("!+b", "VimToRdeCopy")
 HotKeySet("!+h", "ShortcutHelp")
 HotKeySet("!+q", "Terminate")
-HotKeySet("!+r", "ResizeXterm")
+HotKeySet("!+r", "ResizeDevWindows")
 HotKeySet("!+u", "Uuid")
 HotKeySet("!+v", "RdeToVimCopy")
 
@@ -37,7 +37,7 @@ Func ShortcutHelp()
         & "!+q  Terminate" & @CRLF _
         & @CRLF _
         & " Windows Functions: " & @CRLF _
-        & "!+r  Resize XTerm" & @CRLF _
+        & "!+r  Resize Dev Windows" & @CRLF _
         & "!+u  Uuid" & @CRLF _
         & "!+v  RdeToVimCopy" & @CRLF _
         & "!+b  VimToRdeCopy" & @CRLF _
@@ -51,8 +51,8 @@ Func ShortcutHelp()
     ToolTip("")
 EndFunc
 
-; Move and resize ibm2 and linxdev21
-Func ResizeXterm()
+; Move and resize ibm2, linxdev21, and GVIM
+Func ResizeDevWindows()
     ClearModifiers()
 	
 	Local $startMenuHeight = 40
