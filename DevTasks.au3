@@ -82,7 +82,7 @@ Func ResizeXterm()
     EndIf
 	
     Opt("WinTitleMatchMode", 2) ; substring match
-	Local $gvim = WinActive("GVIM")
+	Local $gvim = WinActivate("GVIM")
 	If($gvim) Then
 		WinMove($gvim, "GVIM", $gvimPos[0], $gvimPos[1], $gvimSize[0], $gvimSize[1])
 	EndIf
