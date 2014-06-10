@@ -7,11 +7,15 @@
 ; ! = ALT
 ; + = SHIFT
 ; ^ = CTRL
-HotKeySet("!+a", "TestSXAD")
 HotKeySet("!+b", "VimToRdeCopy")
+HotKeySet("!+v", "RdeToVimCopy")
 HotKeySet("!+h", "ShortcutHelp")
+HotKeySet("!+i", "ActivateIbm2")
+HotKeySet("!+j", "ActivateGVIM")
+HotKeySet("!+l", "ActivateLinxdev21")
 HotKeySet("!+q", "Terminate")
 HotKeySet("!+r", "ResizeDevWindows")
+HotKeySet("!+s", "SXBL_Message")
 HotKeySet("!+u", "Uuid")
 HotKeySet("!+v", "RdeToVimCopy")
 
@@ -103,6 +107,10 @@ Func TestSXAD()
 	TerminalFunction($funcCall)
 EndFunc
 
+Func SXBL_Message()
+	
+EndFunc
+
 Func RdeToVimCopy()
     Opt("WinTitleMatchMode", 2) ; substring match
     If Not WinActivate("Bloomberg Rapid Development Environment") Then
@@ -157,7 +165,21 @@ Func VimToRdeCopy()
     ClearModifiers()
 EndFunc
 
+Func ActivateGVIM()
+    ClearModifiers()
+	Opt("WinTitleMatchMode", 2) ; substring match
+	WinActivate("GVIM")
+EndFunc
 
+Func ActivateLinxdev21()
+    ClearModifiers()
+	WinActivate("linxdev21")
+EndFunc
+
+Func ActivateIbm2()
+    ClearModifiers()
+	WinActivate("ibm2")
+EndFunc
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Clear shift/ctrl/alt to prevent them from getting stuck or the script executing while the user
