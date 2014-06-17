@@ -7,6 +7,10 @@
 ; ! = ALT
 ; + = SHIFT
 ; ^ = CTRL
+HotKeySet("!+1", "ActivateTerminal1")
+HotKeySet("!+2", "ActivateTerminal2")
+HotKeySet("!+3", "ActivateTerminal3")
+HotKeySet("!+4", "ActivateTerminal4")
 HotKeySet("!+b", "VimToRdeCopy")
 HotKeySet("!+v", "RdeToVimCopy")
 HotKeySet("!+h", "ShortcutHelp")
@@ -41,6 +45,7 @@ Func ShortcutHelp()
         & "!+q  Terminate" & @CRLF _
         & @CRLF _
         & " Windows Functions: " & @CRLF _
+        & "!+[1-4]  Activate Terminal 1-4" & @CRLF _
         & "!+r  Resize Dev Windows" & @CRLF _
         & "!+u  Uuid" & @CRLF _
         & "!+v  RdeToVimCopy" & @CRLF _
@@ -107,9 +112,6 @@ Func TestSXAD()
 	TerminalFunction($funcCall)
 EndFunc
 
-Func SXBL_Message()
-	
-EndFunc
 
 Func RdeToVimCopy()
     Opt("WinTitleMatchMode", 2) ; substring match
@@ -180,6 +182,27 @@ Func ActivateIbm2()
     ClearModifiers()
 	WinActivate("ibm2")
 EndFunc
+
+Func ActivateTerminal1()
+	ClearModifiers()
+	WinActivate("1-BLOOMBERG")
+EndFunc
+
+Func ActivateTerminal2()
+	ClearModifiers()
+	WinActivate("2-BLOOMBERG")
+EndFunc
+
+Func ActivateTerminal3()
+	ClearModifiers()
+	WinActivate("3-BLOOMBERG")
+EndFunc
+
+Func ActivateTerminal4()
+	ClearModifiers()
+	WinActivate("4-BLOOMBERG")
+EndFunc
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Clear shift/ctrl/alt to prevent them from getting stuck or the script executing while the user
@@ -214,6 +237,13 @@ Func ErrorTooltip($msg)
 EndFunc
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; WIP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Func SXBL_Message()
+	
+EndFunc
+
+Func AjamPort()
+EndFunc
+
 
 ; Starts IBM2 and LinxDev21, then resize and position the windows
 Func ToolkitStartup()
