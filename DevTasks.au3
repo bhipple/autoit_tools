@@ -28,6 +28,9 @@ Local $resolution[2] = [5120, 1440]
 Local $vimLeader = "\"
 Local $uuid = "11795629"
 
+Local $savedLinxWin
+Local $savedIbmWin
+
 While(1)
     Sleep(500)
 WEnd
@@ -83,11 +86,13 @@ Func ResizeDevWindows()
     Local $ibmWin = WinActivate("ibm")
     If($ibmWin) Then
         WinMove($ibmWin, "ibm2", $ibmPos[0], $ibmPos[1], $ibmSize[0], $ibmSize[1])
+		$savedIbmWin = $ibmWin
     EndIf
 
     Local $linxWin = WinActivate("linxdev21")
     If($linxWin) Then
         WinMove($linxWin, "linxdev21", $linxPos[0], $linxPos[1], $linxSize[0], $linxSize[1])
+		$savedLinxWin = $linxWin
     EndIf
 	
     Opt("WinTitleMatchMode", 2) ; substring match
@@ -95,7 +100,6 @@ Func ResizeDevWindows()
 	If($gvim) Then
 		WinMove($gvim, "GVIM", $gvimPos[0], $gvimPos[1], $gvimSize[0], $gvimSize[1])
 	EndIf
-	
 EndFunc
 
 ; Paste my UUID
@@ -175,12 +179,16 @@ EndFunc
 
 Func ActivateLinxdev21()
     ClearModifiers()
-	WinActivate("linxdev21")
+	If Not WinActivate("linxdev21") Then
+		WinActivate($savedLinxWin)
+	EndIf
 EndFunc
 
 Func ActivateIbm2()
     ClearModifiers()
-	WinActivate("ibm2")
+	If Not WinActivate("linxdev21") Then
+		WinActivate($savedIbmWin)
+	EndIf
 EndFunc
 
 Func ActivateTerminal1()
@@ -242,6 +250,40 @@ Func SXBL_Message()
 EndFunc
 
 Func AjamPort()
+EndFunc
+
+
+; Move and resize ibm2, linxdev21, and GVIM
+Func ResizeProdWindows()
+    ClearModifiers()
+	
+	; Position to put the first prod window
+	Local $startCoord[2] = [$resolution[0] / 2, 0]
+	Local $movedWindows = 0
+	
+	; Size of a prod window
+	Local $prodSize[2] = [800, 600]
+	
+	
+	
+	
+	; Move the windows
+    Local $ibmWin = WinActivate("ibm")
+    If($ibmWin) Then
+        WinMove($ibmWin, "ibm2", $ibmPos[0], $ibmPos[1], $ibmSize[0], $ibmSize[1])
+    EndIf
+
+    Local $linxWin = WinActivate("linxdev21")
+    If($linxWin) Then
+        WinMove($linxWin, "linxdev21", $linxPos[0], $linxPos[1], $linxSize[0], $linxSize[1])
+    EndIf
+	
+    Opt("WinTitleMatchMode", 2) ; substring match
+	Local $gvim = WinActivate("GVIM")
+	If($gvim) Then
+		WinMove($gvim, "GVIM", $gvimPos[0], $gvimPos[1], $gvimSize[0], $gvimSize[1])
+	EndIf
+	
 EndFunc
 
 
