@@ -17,6 +17,7 @@ HotKeySet("!+h", "ShortcutHelp")
 HotKeySet("!+i", "ActivateIbm2")
 HotKeySet("!+j", "ActivateGVIM")
 HotKeySet("!+l", "ActivateLinxdev21")
+HotKeySet("!+p", "ResizeProdWindows")
 HotKeySet("!+q", "Terminate")
 HotKeySet("!+r", "ResizeDevWindows")
 HotKeySet("!+s", "SXBL_Message")
@@ -49,6 +50,7 @@ Func ShortcutHelp()
         & @CRLF _
         & " Windows Functions: " & @CRLF _
         & "!+[1-4]  Activate Terminal 1-4" & @CRLF _
+        & "!+p  Resize Prod Windows" & @CRLF _
         & "!+r  Resize Dev Windows" & @CRLF _
         & "!+u  Uuid" & @CRLF _
         & "!+v  RdeToVimCopy" & @CRLF _
@@ -83,7 +85,7 @@ Func ResizeDevWindows()
 
 
 	; Move the windows
-    Local $ibmWin = WinActivate("ibm")
+    Local $ibmWin = WinActivate("ibm2")
     If($ibmWin) Then
         WinMove($ibmWin, "ibm2", $ibmPos[0], $ibmPos[1], $ibmSize[0], $ibmSize[1])
 		$savedIbmWin = $ibmWin
@@ -100,6 +102,35 @@ Func ResizeDevWindows()
 	If($gvim) Then
 		WinMove($gvim, "GVIM", $gvimPos[0], $gvimPos[1], $gvimSize[0], $gvimSize[1])
 	EndIf
+EndFunc
+
+; Move and Resize OP1 Production Windows
+Func ResizeProdWindows()
+    ClearModifiers()
+	
+	; Position to put the first prod window
+	Local $startCoord[2] = [$resolution[0] / 2, 0]
+	
+	Local $windowSize[2] = [800, 600]
+	Local $windowsPerRow = 3
+	Local $prodNames[6] = ["y895-op1-console", "j896-op1-console", "y897-op1-console", "j898-op1-console", "y753-op1-console", "j754-op1-console"]
+	
+	Local $movedWindows = 0
+	
+	For $i = 0 To UBound($prodNames) - 1
+		Local $thisWin = WinActivate($prodNames[$movedWindows])
+		If($thisWin) Then
+			Local $xCoord = Mod($movedWindows, $windowsPerRow)
+			Local $yCoord = Int(($movedWindows / $windowsPerRow))
+			Local $thisWinPos[2] = [$startCoord[0] + ($windowSize[0] * $xCoord), $startCoord[1] + ($windowSize[1] * $yCoord)]
+				
+			WinMove($thisWin, $prodNames[$movedWindows], $thisWinPos[0], $thisWinPos[1], $windowSize[0], $windowSize[1])
+			
+			$movedWindows = $movedWindows + 1
+		Endif
+	Next
+	
+    ClearModifiers()
 EndFunc
 
 ; Paste my UUID
@@ -186,7 +217,7 @@ EndFunc
 
 Func ActivateIbm2()
     ClearModifiers()
-	If Not WinActivate("linxdev21") Then
+	If Not WinActivate("ibm2") Then
 		WinActivate($savedIbmWin)
 	EndIf
 EndFunc
@@ -253,38 +284,6 @@ Func AjamPort()
 EndFunc
 
 
-; Move and resize ibm2, linxdev21, and GVIM
-Func ResizeProdWindows()
-    ClearModifiers()
-	
-	; Position to put the first prod window
-	Local $startCoord[2] = [$resolution[0] / 2, 0]
-	Local $movedWindows = 0
-	
-	; Size of a prod window
-	Local $prodSize[2] = [800, 600]
-	
-	
-	
-	
-	; Move the windows
-    Local $ibmWin = WinActivate("ibm")
-    If($ibmWin) Then
-        WinMove($ibmWin, "ibm2", $ibmPos[0], $ibmPos[1], $ibmSize[0], $ibmSize[1])
-    EndIf
-
-    Local $linxWin = WinActivate("linxdev21")
-    If($linxWin) Then
-        WinMove($linxWin, "linxdev21", $linxPos[0], $linxPos[1], $linxSize[0], $linxSize[1])
-    EndIf
-	
-    Opt("WinTitleMatchMode", 2) ; substring match
-	Local $gvim = WinActivate("GVIM")
-	If($gvim) Then
-		WinMove($gvim, "GVIM", $gvimPos[0], $gvimPos[1], $gvimSize[0], $gvimSize[1])
-	EndIf
-	
-EndFunc
 
 
 ; Starts IBM2 and LinxDev21, then resize and position the windows
