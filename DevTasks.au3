@@ -16,6 +16,7 @@ HotKeySet("!+h", "ShortcutHelp")
 HotKeySet("!+i", "ActivateIbm2")
 HotKeySet("!+j", "ActivateGVIM")
 HotKeySet("!+l", "ActivateLinxdev21")
+HotKeySet("!+o", "ResizeSCIQWindows")
 HotKeySet("!+p", "ResizeProdWindows")
 HotKeySet("!+q", "Terminate")
 HotKeySet("!+r", "ResizeDevWindows")
@@ -103,27 +104,37 @@ Func ResizeDevWindows()
 	EndIf
 EndFunc
 
-; Move and Resize OP1 Production Windows
 Func ResizeProdWindows()
+	ClearModifiers()
+	Local $prodNames[6] = ["y895-op1-console", "j896-op1-console", "y897-op1-console", "j898-op1-console", "y753-op1-console", "j754-op1-console"]
+	ResizeOpWindows($prodNames)
+EndFunc
+
+Func ResizeSCIQWindows()
+	ClearModifiers()
+	Local $sciqNames[4] = ["y893-op1-console", "j894-op1-console", "y481-op1-console", "j482-op1-console"]
+	ResizeOpWindows($sciqNames)
+EndFunc
+
+; Move and Resize OP1 Windows
+Func ResizeOpWindows($windowNames)
     ClearModifiers()
 	
-	; Position to put the first prod window
+	; Position to put the first op window
 	Local $startCoord[2] = [$resolution[0] / 2, 0]
 	
 	Local $windowSize[2] = [800, 600]
 	Local $windowsPerRow = 3
-	Local $prodNames[6] = ["y895-op1-console", "j896-op1-console", "y897-op1-console", "j898-op1-console", "y753-op1-console", "j754-op1-console"]
-	
 	Local $movedWindows = 0
 	
-	For $i = 0 To UBound($prodNames) - 1
-		Local $thisWin = WinActivate($prodNames[$movedWindows])
+	For $i = 0 To UBound($windowNames) - 1
+		Local $thisWin = WinActivate($windowNames[$movedWindows])
 		If($thisWin) Then
 			Local $xCoord = Mod($movedWindows, $windowsPerRow)
 			Local $yCoord = Int(($movedWindows / $windowsPerRow))
 			Local $thisWinPos[2] = [$startCoord[0] + ($windowSize[0] * $xCoord), $startCoord[1] + ($windowSize[1] * $yCoord)]
 				
-			WinMove($thisWin, $prodNames[$movedWindows], $thisWinPos[0], $thisWinPos[1], $windowSize[0], $windowSize[1])
+			WinMove($thisWin, $windowNames[$movedWindows], $thisWinPos[0], $thisWinPos[1], $windowSize[0], $windowSize[1])
 			
 			$movedWindows = $movedWindows + 1
 		Endif
