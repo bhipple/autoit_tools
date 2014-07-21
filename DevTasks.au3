@@ -24,6 +24,9 @@ HotKeySet("!+s", "SXBL_Message")
 HotKeySet("!+u", "Uuid")
 HotKeySet("!+v", "RdeToVimCopy")
 
+;HotKeySet("{CAPSLOCK}", "CapsLockToCtrl")
+;Opt("SendCapslockMode", 0)
+
 ; Configuration Globals
 Local $resolution[2] = [5120, 1440]
 Local $vimLeader = "\"
@@ -33,11 +36,14 @@ Local $savedLinxWin
 Local $savedIbmWin
 
 While(1)
-    Sleep(500)
+    Sleep(25)
 WEnd
 
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 
 ; Shows ToolTip with keyboard shortcuts for functions
 Func ShortcutHelp()
@@ -286,15 +292,20 @@ Func ErrorTooltip($msg)
 EndFunc
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; WIP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Func CapsLockToCtrl()
+	Send("{CTRLDOWN}")
+	While(_IsPressed(14));~ 		Sleep(10)
+	WEnd
+	Send("{CTRLUP}")
+	Send("{CAPSLOCK}")
+	Send("{CAPSLOCK off}")
+EndFunc
+
 Func SXBL_Message()
-	
 EndFunc
 
 Func AjamPort()
 EndFunc
-
-
-
 
 ; Starts IBM2 and LinxDev21, then resize and position the windows
 Func ToolkitStartup()
