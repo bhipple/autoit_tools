@@ -1,9 +1,22 @@
-
-; Shortcuts for my common development tasks
+;; ============================================================================
+;;                      Shortcuts for Common Dev Tasks
+;; ============================================================================
 
 ; for _IsPressed()
 #include <Misc.au3>
 
+; Configuration Globals
+Local $resolution[2] = [5120, 1440]
+Local $vimLeader = "\"
+Local $uuid = "11795629"
+
+Local $savedLinxWin
+Local $savedIbmWin
+
+
+;; ============================================================================
+;;                                  Hotkeys
+;; ============================================================================
 ; ! = ALT
 ; + = SHIFT
 ; ^ = CTRL
@@ -24,26 +37,13 @@ HotKeySet("!+s", "SXBL_Message")
 HotKeySet("!+u", "Uuid")
 HotKeySet("!+v", "RdeToVimCopy")
 
-;HotKeySet("{CAPSLOCK}", "CapsLockToCtrl")
-;Opt("SendCapslockMode", 0)
-
-; Configuration Globals
-Local $resolution[2] = [5120, 1440]
-Local $vimLeader = "\"
-Local $uuid = "11795629"
-
-Local $savedLinxWin
-Local $savedIbmWin
-
 While(1)
     Sleep(25)
 WEnd
 
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
+;; ============================================================================
+;;                                 Functions
+;; ============================================================================
 
 ; Shows ToolTip with keyboard shortcuts for functions
 Func ShortcutHelp()
@@ -63,7 +63,6 @@ Func ShortcutHelp()
         & "!+b  VimToRdeCopy" & @CRLF _
         & @CRLF _
         & " Terminal Functions: " & @CRLF _
-        & "!+a  Test SXAD" & @CRLF _
         & @CRLF _
         , 0, 0)
 
@@ -88,7 +87,6 @@ Func ResizeDevWindows()
 	; Left side of right monitor
     Local $gvimSize[2] = [($resolution[0] / 2) - $ibmSize[0], 1440]
     Local $gvimPos[2] = [$resolution[0] / 2, 0]
-
 
 	; Move the windows
     Local $ibmWin = WinActivate("ibm2")
@@ -154,15 +152,6 @@ Func Uuid()
     ClearModifiers()
     Send($uuid)
 EndFunc
-
-; Load the SXAD function with my UUID and
-Func TestSXAD()
-    ClearModifiers()
-    Local $funcCall = "RRRR SXAD 290 537539E70086055A0364052D" & " /" & $uuid
-	
-	TerminalFunction($funcCall)
-EndFunc
-
 
 Func RdeToVimCopy()
     Opt("WinTitleMatchMode", 2) ; substring match
@@ -258,7 +247,13 @@ Func ActivateTerminal4()
 	WinActivate("4-BLOOMBERG")
 EndFunc
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;; Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Func Terminate()
+    Exit 0
+EndFunc
+
+;; ============================================================================
+;;                                  Helpers
+;; ============================================================================
 
 ; Clear shift/ctrl/alt to prevent them from getting stuck or the script executing while the user
 ; is still holding them down.
@@ -267,6 +262,7 @@ Func ClearModifiers()
         Send("{SHIFTUP}")
         Send("{CTRLUP}")
         Send("{ALTUP}")
+		Sleep(25)
     WEnd
 EndFunc
 
@@ -291,7 +287,13 @@ Func ErrorTooltip($msg)
     ToolTip("")
 EndFunc
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; WIP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; ============================================================================
+;;                                    WIP
+;; ============================================================================
+
+;HotKeySet("{CAPSLOCK}", "CapsLockToCtrl")
+;Opt("SendCapslockMode", 0)
 Func CapsLockToCtrl()
 	Send("{CTRLDOWN}")
 	While(_IsPressed(14));~ 		Sleep(10)
@@ -299,34 +301,4 @@ Func CapsLockToCtrl()
 	Send("{CTRLUP}")
 	Send("{CAPSLOCK}")
 	Send("{CAPSLOCK off}")
-EndFunc
-
-Func SXBL_Message()
-EndFunc
-
-Func AjamPort()
-EndFunc
-
-; Starts IBM2 and LinxDev21, then resize and position the windows
-Func ToolkitStartup()
-    ClearModifiers()
-
-    ; Function Variables
-    Local $ibmOffset[2] = [0, 0]        ; ibm2
-    Local $linxOffset[2] = [0, 0]       ; linxdev21
-
-
-    Local $toolkitHandle = WinActivate("Toolkit")
-    Local $toolkitPos = WinGetPos("Toolkit")
-
-    ; debug
-    MsgBox("", "Toolkit [x, y] position", "[" & $toolkitPos[0] & ", " & $toolkitPos[1] & "]")
-
-    ; TODO - Open the windows
-
-    ResizeXterm()
-EndFunc
-
-Func Terminate()
-    Exit 0
 EndFunc
