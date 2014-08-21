@@ -9,6 +9,7 @@
 Local $resolution[2] = [5120, 1440]
 Local $vimLeader = "\"
 Local $uuid = "11795629"
+Local $startMenuHeight = 0
 
 Local $savedLinxWin
 Local $savedIbmWin
@@ -73,8 +74,6 @@ EndFunc
 ; Move and resize ibm2, linxdev21, and GVIM
 Func ResizeDevWindows()
     ClearModifiers()
-	
-	Local $startMenuHeight = 40
 	
 	; Right side of left monitor
     Local $linxSize[2] = [900, 1440 - $startMenuHeight]
