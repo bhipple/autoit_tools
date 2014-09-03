@@ -10,9 +10,12 @@ Local $resolution[2] = [5120, 1440]
 Local $vimLeader = "\"
 Local $uuid = "11795629"
 Local $startMenuHeight = 0
+Local $startMenuWidth = 260
 
 Local $savedLinxWin
 Local $savedIbmWin
+
+Local $puttySubstring = "(gateway:"
 
 
 ;; ============================================================================
@@ -25,18 +28,18 @@ HotKeySet("!+1", "ActivateTerminal1")
 HotKeySet("!+2", "ActivateTerminal2")
 HotKeySet("!+3", "ActivateTerminal3")
 HotKeySet("!+4", "ActivateTerminal4")
-HotKeySet("!+b", "VimToRdeCopy")
+HotKeySet("!+b", "ActivateIB")
+HotKeySet("!+c", "ActivateChrome")
+HotKeySet("!+d", "ActivateRDE")
 HotKeySet("!+h", "ShortcutHelp")
 HotKeySet("!+i", "ActivateIbm2")
-HotKeySet("!+j", "ActivateGVIM")
+HotKeySet("!+j", "ActivatePutty")
 HotKeySet("!+l", "ActivateLinxdev21")
 HotKeySet("!+o", "ResizeSCIQWindows")
 HotKeySet("!+p", "ResizeProdWindows")
 HotKeySet("!+q", "Terminate")
 HotKeySet("!+r", "ResizeDevWindows")
-HotKeySet("!+s", "SXBL_Message")
 HotKeySet("!+u", "Uuid")
-HotKeySet("!+v", "RdeToVimCopy")
 
 While(1)
     Sleep(25)
@@ -57,11 +60,11 @@ Func ShortcutHelp()
         & @CRLF _
         & " Windows Functions: " & @CRLF _
         & "!+[1-4]  Activate Terminal 1-4" & @CRLF _
+        & "!+b  Activate IB" & @CRLF _
+        & "!+c  Activate Chrome" & @CRLF _
         & "!+p  Resize Prod Windows" & @CRLF _
         & "!+r  Resize Dev Windows" & @CRLF _
         & "!+u  Uuid" & @CRLF _
-        & "!+v  RdeToVimCopy" & @CRLF _
-        & "!+b  VimToRdeCopy" & @CRLF _
         & @CRLF _
         & " Terminal Functions: " & @CRLF _
         & @CRLF _
@@ -86,6 +89,11 @@ Func ResizeDevWindows()
 	; Left side of right monitor
     Local $gvimSize[2] = [($resolution[0] / 2) - $ibmSize[0], 1440]
     Local $gvimPos[2] = [$resolution[0] / 2, 0]
+	
+	; All of right monitor, half of left monitor
+	;Local $puttySize[2] = [(2560 + ((2560 - $startMenuWidth)/2)), 1440]
+	Local $puttySize[2] = [(800 + 2560), 1440]
+	Local $puttyPos[2] = [2560 * 2 - $puttySize[0], 0]
 
 	; Move the windows
     Local $ibmWin = WinActivate("ibm2")
@@ -104,6 +112,11 @@ Func ResizeDevWindows()
 	Local $gvim = WinActivate("GVIM")
 	If($gvim) Then
 		WinMove($gvim, "GVIM", $gvimPos[0], $gvimPos[1], $gvimSize[0], $gvimSize[1])
+	EndIf
+	
+	Local $putty = WinActivate($puttySubstring)
+	If($putty) Then
+		WinMove($putty, "(gateway:", $puttyPos[0], $puttyPos[1], $puttySize[0], $puttySize[1])
 	EndIf
 EndFunc
 
@@ -152,64 +165,22 @@ Func Uuid()
     Send($uuid)
 EndFunc
 
-Func RdeToVimCopy()
-    Opt("WinTitleMatchMode", 2) ; substring match
-    If Not WinActivate("Bloomberg Rapid Development Environment") Then
-        ErrorTooltip("Could not find Rapid.")
-        Return
-    Endif
-    ClearModifiers()
-    Sleep(250)
-    Send("{CTRLDOWN}a")
-    Sleep(100)
-    Send("c")
-    ClearModifiers()
-
-    If Not WinActivate("VIM") Then
-        ErrorTooltip("Could not find Vim.")
-        Return
-    EndIf
-    Send(":tabe{ENTER}")
-    Send('"*P{ENTER}')
-    Send(":set syntax=javascript{ENTER}")
-    Send($vimLeader & $vimLeader & "w")     ;; Remove trailing whitespace (my vimrc)
-    Send("gg")
-
-    ClearModifiers()
-EndFunc
-
-Func VimToRdeCopy()
-    Opt("WinTitleMatchMode", 2) ; substring match
-    If Not WinActivate("VIM") Then
-        ErrorTooltip("Could not find Vim.")
-        Return
-    EndIf
-    Send("{ESCAPE}")
-    Send("gg{SHIFTDOWN}v")
-    Sleep(100)
-    Send("g")
-    ClearModifiers()
-    Send("{CTRLDOWN}c")
-
-    If Not WinActivate("Bloomberg Rapid Development Environment") Then
-        ErrorTooltip("Could not find Rapid.")
-        Return
-    Endif
-
-    ClearModifiers()
-    Sleep(250)
-    Send("{CTRLDOWN}a")
-    ClearModifiers()
-    Sleep(100)
-    Send("{DELETE}")
-    Send("{CTRLDOWN}v")
-    ClearModifiers()
-EndFunc
-
 Func ActivateGVIM()
     ClearModifiers()
 	Opt("WinTitleMatchMode", 2) ; substring match
 	WinActivate("GVIM")
+EndFunc
+
+Func ActivateRDE()
+    ClearModifiers()
+	Opt("WinTitleMatchMode", 2) ; substring match
+	WinActivate("Bloomberg Rapid Development Environment")
+EndFunc
+
+Func ActivatePutty()
+    ClearModifiers()
+	Opt("WinTitleMatchMode", 2) ; substring match
+	WinActivate($puttySubstring)
 EndFunc
 
 Func ActivateLinxdev21()
@@ -224,6 +195,17 @@ Func ActivateIbm2()
 	If Not WinActivate("ibm2") Then
 		WinActivate($savedIbmWin)
 	EndIf
+EndFunc
+
+Func ActivateIB()
+    ClearModifiers()
+	WinActivate("IB - IB Manager")
+EndFunc
+
+Func ActivateChrome()
+    ClearModifiers()
+	Opt("WinTitleMatchMode", 2) ; substring match
+	WinActivate("- Google Chrome")
 EndFunc
 
 Func ActivateTerminal1()
