@@ -14,6 +14,7 @@ Local $startMenuWidth = 260
 
 Local $savedLinxWin
 Local $savedIbmWin
+Local $savedPutty
 
 Local $puttySubstring = "(gateway:"
 
@@ -117,6 +118,7 @@ Func ResizeDevWindows()
 	Local $putty = WinActivate($puttySubstring)
 	If($putty) Then
 		WinMove($putty, "(gateway:", $puttyPos[0], $puttyPos[1], $puttySize[0], $puttySize[1])
+		$savedPutty = $putty
 	EndIf
 EndFunc
 
@@ -180,7 +182,9 @@ EndFunc
 Func ActivatePutty()
     ClearModifiers()
 	Opt("WinTitleMatchMode", 2) ; substring match
-	WinActivate($puttySubstring)
+	If Not WinActivate($puttySubstring) Then
+		WinActivate($savedPutty)
+	EndIf
 EndFunc
 
 Func ActivateLinxdev21()
