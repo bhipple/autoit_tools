@@ -29,9 +29,11 @@ HotKeySet("!+1", "ActivateTerminal1")
 HotKeySet("!+2", "ActivateTerminal2")
 HotKeySet("!+3", "ActivateTerminal3")
 HotKeySet("!+4", "ActivateTerminal4")
+HotKeySet("!+9", "RdeToVimCopy")
 HotKeySet("!+b", "ActivateIB")
 HotKeySet("!+c", "ActivateChrome")
 HotKeySet("!+d", "ActivateRDE")
+HotKeySet("!+f", "ActivateFirefox")
 HotKeySet("!+h", "ShortcutHelp")
 HotKeySet("!+i", "ActivateIbm2")
 HotKeySet("!+j", "ActivatePutty")
@@ -41,6 +43,7 @@ HotKeySet("!+p", "ResizeProdWindows")
 HotKeySet("!+q", "Terminate")
 HotKeySet("!+r", "ResizeDevWindows")
 HotKeySet("!+u", "Uuid")
+HotKeySet("!+v", "ActivateVM")
 
 While(1)
     Sleep(25)
@@ -212,6 +215,12 @@ Func ActivateChrome()
 	WinActivate("- Google Chrome")
 EndFunc
 
+Func ActivateFirefox()
+    ClearModifiers()
+	Opt("WinTitleMatchMode", 2) ; substring match
+	WinActivate("Vimperator")
+EndFunc
+
 Func ActivateTerminal1()
 	ClearModifiers()
 	WinActivate("1-BLOOMBERG")
@@ -230,6 +239,37 @@ EndFunc
 Func ActivateTerminal4()
 	ClearModifiers()
 	WinActivate("4-BLOOMBERG")
+EndFunc
+
+Func ActivateVM()
+	ClearModifiers()
+	Opt("WinTitleMatchMode", 2) ; substring match
+	WinActivate(" - Oracle VM VirtualBox")
+EndFunc
+
+
+Func RdeToVimCopy()
+    Opt("WinTitleMatchMode", 2) ; substring match
+    If Not WinActivate("Bloomberg Rapid Development Environment") Then
+        ErrorTooltip("Could not find Rapid.")
+        Return
+    Endif
+    ClearModifiers()
+    Sleep(250)
+    Send("{CTRLDOWN}a")
+    Sleep(100)
+    Send("c")
+    ClearModifiers()
+
+    If Not WinActivate("VIM") Then
+        ErrorTooltip("Could not find Vim.")
+        Return
+    EndIf
+    Send(":tabe{ENTER}")
+    Send('"*P{ENTER}')
+    Send(":set syntax=javascript{ENTER}")
+    Send($vimLeader & $vimLeader & "w")     ;; Remove trailing whitespace (my vimrc)
+    Send("gg")
 EndFunc
 
 Func Terminate()
