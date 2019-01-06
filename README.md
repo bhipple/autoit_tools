@@ -1,4 +1,4 @@
 AutoItTools
 ===========
 
-Functions and Utilities for basic AutoIt automation and development
+Functions and Utilities for basic AutoHotkey / AutoIt automation on Windows.
